@@ -3,9 +3,10 @@
     public class ClassAttendance
     {
         public int Id { get; set; }
-        public string ClassType { get; set; }
-        public int UserId { get; set; }
-        public string UserName { get; set; }
-        public bool isPresent { get; set; }
+        public DateTime Date { get; set; } // Datum prisutnosti
+        public string ClassType { get; set; } // Predavanja, auditorne ili labovi
+        public int UserId { get; set; } // Id usera
+        public string UserName { get; set; } // Ime studenta/profesora
+        public bool isPresent { get; set; } // Da li je bija prisutan tad i tad.
     }
 }

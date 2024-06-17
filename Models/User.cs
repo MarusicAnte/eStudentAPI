@@ -10,7 +10,8 @@
         public string Email { get; set; }   
         public string Password { get; set; }
         public DateTime EnrollmentDate { get; set; }
-        public Schedule Schedule { get; set; }
         public CollegeDepartment Department { get; set; }
+        public Schedule Schedule { get; set; }
+        public List<ClassAttendance> ClassAttendances { get; set; }
     }
 }
