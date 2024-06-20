@@ -134,3 +134,4 @@ C:\Users\User\Desktop\Diplomski\eStudent\obj\Debug\net8.0\refint\eStudent.dll
 C:\Users\User\Desktop\Diplomski\eStudent\obj\Debug\net8.0\eStudent.pdb
 C:\Users\User\Desktop\Diplomski\eStudent\obj\Debug\net8.0\eStudent.genruntimeconfig.cache
 C:\Users\User\Desktop\Diplomski\eStudent\obj\Debug\net8.0\ref\eStudent.dll
+C:\Users\User\Desktop\Diplomski\eStudent\obj\Debug\net8.0\eStudent.sourcelink.json
