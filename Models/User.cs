@@ -16,6 +16,9 @@ namespace eStudent.Models
         #region Relations
         public int RoleId { get; set; }
         public Role Role { get; set; }
+
+        public List<Subject> Subjects { get; set; }
+        public List<CollegeDepartment> Departments { get; set; }
         #endregion
 
         public bool IsAdmin()

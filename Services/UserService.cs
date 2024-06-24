@@ -22,22 +22,17 @@ namespace eStudent.Services
 
         public async Task<List<User>> GetAllUsers(UserQuery userQuery)
         {
-            var users = await _dbContext.Users.Include("Role").ToListAsync();
+            var users = await userQuery.GetUserQuery(_dbContext.Users.Include("Role")).ToListAsync();
 
-            if (users is null) 
-            {
-                throw new Exception("Users doesn't exist !");
-            }
-
-            return users;
+            return users.Count is 0 ? throw new Exception("Users doesn't exist !") : users;
         }
 
 
         public async Task<User> GetUserById(int id)
         {
-            var user = await _dbContext.Users.Include(x => x.Role).FirstOrDefaultAsync(x => x.Id == id);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
             
-            if(user == null)
+            if(user is null)
             {
                 throw new Exception($"User with id {id} does not exist !");
             }
@@ -48,6 +43,11 @@ namespace eStudent.Services
 
         public async Task<User> CreateUser(CreateUserDto createUserDto)
         {
+            if (createUserDto is null)
+            {
+                throw new Exception($"User is null");
+            }
+
             var user = new User
             {
                 RoleId = createUserDto.RoleId,
@@ -58,11 +58,6 @@ namespace eStudent.Services
                 ImageURL = createUserDto.ImageURL
             };
 
-            if (user is null) 
-            {
-                throw new Exception($"User is null");
-            }
-
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
             return user;           
@@ -71,12 +66,16 @@ namespace eStudent.Services
 
         public async Task<User> UpdateUserById(int id, UserDto userDto)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+            if (userDto is null)
+            {
+                throw new Exception("User updated failed !");
+            }
 
+            var user = await _dbContext.Users.FindAsync(id);
 
             if (user is null)
             {
-                throw new Exception("User updated failed !");
+                throw new Exception($"User with id {id} doesn't exist !");
             }
 
             user.Role = userDto.Role;
@@ -97,7 +96,7 @@ namespace eStudent.Services
         {
             var user= await _dbContext.Users.FirstOrDefaultAsync( x => x.Id == id);
 
-            if (user == null)
+            if (user is null)
             {
                 throw new Exception($"User with id {id} does not exist !");
             }
