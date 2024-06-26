@@ -10,7 +10,7 @@ namespace eStudent.Models
 
         #region Relations
         public List<Subject> Subjects { get; set; }
-        public List<User>  Users { get; set; }
+        public List<User> Users { get; set; }
         #endregion
     }
 }

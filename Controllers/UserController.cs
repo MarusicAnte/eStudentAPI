@@ -2,7 +2,6 @@
 using eStudent.Models;
 using eStudent.Models.DTO;
 using eStudent.Query;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eStudent.Controllers
@@ -34,16 +33,16 @@ namespace eStudent.Controllers
 
 
         [HttpPost]
-        public async Task<User> CreateUser([FromBody] CreateUserDto createUserDto ) 
+        public async Task<User> CreateNewUser([FromBody] UserDto userDto ) 
         {
-            return await _userService.CreateUser(createUserDto);
+            return await _userService.CreateNewUser(userDto.ToDomain());
         }
 
 
-        [HttpPatch("{id}")]
-        public async Task<User> UpdateUserById([FromRoute] int id, [FromBody] UserDto userDto) 
+        [HttpPatch]
+        public async Task<User> UpdateUser([FromBody] UserDto userDto) 
         {
-            return await _userService.UpdateUserById(id, userDto);
+            return await _userService.UpdateUser(userDto.ToDomain());
         }
 
 

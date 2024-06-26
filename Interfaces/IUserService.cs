@@ -8,8 +8,8 @@ namespace eStudent.Interfaces
     {
         Task<List<User>> GetAllUsers(UserQuery userQuery);
         Task<User> GetUserById(int id);
-        Task<User> CreateUser(CreateUserDto createUserDto);
-        Task<User> UpdateUserById(int id, UserDto userDto);
+        Task<User> CreateNewUser(User user);
+        Task<User> UpdateUser(User user);
         Task<User> DeleteUserById(int id);
     }
 }

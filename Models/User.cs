@@ -17,8 +17,8 @@ namespace eStudent.Models
         public int RoleId { get; set; }
         public Role Role { get; set; }
 
-        public List<Subject> Subjects { get; set; }
-        public List<CollegeDepartment> Departments { get; set; }
+        public List<Subject>? Subjects { get; set; }
+        public List<CollegeDepartment>? Departments { get; set; }
         #endregion
 
         public bool IsAdmin()
