@@ -9,14 +9,10 @@ namespace eStudent.Services
     public class CollegeDepartmentService : ICollegeDepartmentService
     {
         private readonly ApplicationDBContext _dbContext;
-        private readonly IUserService _userService;
-        private readonly ISubjectService _subjectService;
 
-        public CollegeDepartmentService(ApplicationDBContext dbContext, IUserService userService, ISubjectService subjectService) 
+        public CollegeDepartmentService(ApplicationDBContext dbContext) 
         {
             _dbContext = dbContext;
-            _userService = userService;
-            _subjectService = subjectService;
         }
 
         public async Task<List<CollegeDepartment>> GetAllCollegeDepartments()
@@ -56,8 +52,7 @@ namespace eStudent.Services
         {
             var target = await _dbContext.CollegeDepartments.Include(x => x.Users)
                                                             .Include(x => x.Subjects)
-                                                            .Include(x => x.Id==collegeDepartment.Id)
-                                                            .FirstOrDefaultAsync();
+                                                            .FirstOrDefaultAsync(x => x.Id == collegeDepartment.Id);
             if (target is null)
                 throw new Exception($"College department with id {collegeDepartment.Id} does not exist !");
 
@@ -87,31 +82,25 @@ namespace eStudent.Services
         }
 
 
-        public ValueTask<List<User>> GetUsersForCollegeDepartment(CollegeDepartment collegeDepartment)
+        public async Task<List<User>> GetUsersForCollegeDepartment(CollegeDepartment collegeDepartment)
         {
-            if (collegeDepartment.Users is null || collegeDepartment.Users?.Count is 0)
-                return new ValueTask<List<User>>([]);
+            if (collegeDepartment.Users is null || collegeDepartment.Users.Count is 0)
+                return new List<User>();
 
-            return new ValueTask<List<User>>(_userService.GetAllUsers(
-                   new UserQuery()
-                   {
-                       Ids = collegeDepartment.Users.Select(x => x.Id).ToList()
-                   }
-                ));
+            var usersIds = collegeDepartment.Users.Select(x => x.Id).ToList();
+
+            return await _dbContext.Users.Where(x => usersIds.Contains(x.Id)).ToListAsync();
         }
 
 
-        public ValueTask<List<Subject>> GetSubjectsForCollegeDepartment(CollegeDepartment collegeDepartment)
+        public async Task<List<Subject>> GetSubjectsForCollegeDepartment(CollegeDepartment collegeDepartment)
         {
-            if (collegeDepartment.Subjects is null || collegeDepartment.Subjects?.Count is 0)
-                return new ValueTask<List<Subject>>([]);
+            if (collegeDepartment.Subjects is null || collegeDepartment.Subjects.Count is 0)
+                return new List<Subject>();
 
-            return new ValueTask<List<Subject>>(_subjectService.GetAllSubjects(
-                   new SubjectQuery()
-                   {
-                       Ids = collegeDepartment.Subjects.Select(x => x.Id).ToList()
-                   }
-                ));
+            var subjectIds = collegeDepartment.Subjects.Select(x => x.Id).ToList();
+
+            return await _dbContext.Subjects.Where(x => subjectIds.Contains(x.Id)).ToListAsync();
         }
     }
 }

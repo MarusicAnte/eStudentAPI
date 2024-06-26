@@ -9,15 +9,10 @@ namespace eStudent.Services
     public class SubjectService : ISubjectService
     {
         private readonly ApplicationDBContext _dbContext;
-        private readonly IUserService _userService;
-        private readonly ICollegeDepartmentService _collegeDepartmentService;
 
-        public SubjectService(ApplicationDBContext dbContext, IUserService userService
-                             ICollegeDepartmentService collegeDepartmentService)
+        public SubjectService(ApplicationDBContext dbContext)
         {
             _dbContext = dbContext;
-            _userService = userService;
-            _collegeDepartmentService = collegeDepartmentService;
         }
 
 
@@ -89,31 +84,25 @@ namespace eStudent.Services
         }
 
 
-        private ValueTask<List<User>> GetUsersForSubject(Subject subject)
+        private async Task<List<User>> GetUsersForSubject(Subject subject)
         {
-            if (subject.Users is null || subject.Users?.Count is 0)
-                return new ValueTask<List<User>>([]);
+            if (subject.Users is null || subject.Users.Count is 0)
+                return new List<User>();
 
-            return new ValueTask<List<User>>(_userService.GetAllUsers(
-                   new UserQuery()
-                   {
-                       Ids = subject.Users.Select(x => x.Id).ToList()
-                   }
-               ));
+            var usersIds = subject.Users.Select(x => x.Id);
+
+            return await _dbContext.Users.Where(x => usersIds.Contains(x.Id)).ToListAsync();
         }
 
 
-        private ValueTask<List<CollegeDepartment>> GetCollegeDepartmentsForSubject(Subject subject)
+        private async Task<List<CollegeDepartment>> GetCollegeDepartmentsForSubject(Subject subject)
         {
-            if (subject.Departments is null || subject.Departments?.Count is 0)
-                return new ValueTask<List<CollegeDepartment>>([]);
+            if (subject.Departments is null || subject.Departments.Count is 0)
+                return new List<CollegeDepartment>();
 
-            return new ValueTask<List<CollegeDepartment>>(_collegeDepartmentService.GetAllCollegeDepartments(
-                   new CollegeDepartmentQuery()
-                   {
-                       Ids = subject.Departments.Select(x => x.Id).ToList()
-                   }
-               ));
+            var collegeDepartmentsIds = subject.Departments.Select(x => x.Id);
+
+            return await _dbContext.CollegeDepartments.Where(x => collegeDepartmentsIds.Contains(x.Id)).ToListAsync();
         }
     }
 }

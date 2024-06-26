@@ -24,6 +24,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
+builder.Services.AddScoped<ICollegeDepartmentService, CollegeDepartmentService>();
 
 // Register Query and its implementation UserQuery
 builder.Services.AddScoped<UserQuery, UserQuery>();

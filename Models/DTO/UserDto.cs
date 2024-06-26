@@ -3,7 +3,7 @@
     public class UserDto
     {
         public int Id { get; set; }
-        public int? RoleId { get; set; }
+        public int RoleId { get; set; }
         public Role? Role { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
@@ -12,6 +12,7 @@
         public string? ImageURL { get; set; }
 
         public List<SubjectDto>? Subjects { get; set; }
+        public List<CollegeDepartmentDto>? CollegeDepartmetns { get; set; }
 
         public static readonly Func<User, UserDto> Select
             = x => new()
@@ -24,6 +25,7 @@
                 RoleId = x.RoleId,
                 Role= x.Role,
                 Subjects = x.Subjects?.Select(SubjectDto.Select).ToList(),
+                CollegeDepartmetns = x.Departments?.Select(CollegeDepartmentDto.Select).ToList()
             };
 
         public User ToDomain()
@@ -37,6 +39,7 @@
                RoleId = RoleId,
                ImageURL= ImageURL,
                Subjects = Subjects?.Select(x => x.ToDomain()).ToList(),
+               Departments = CollegeDepartmetns?.Select(x =>x.ToDomain()).ToList()
            };
     }
 }
